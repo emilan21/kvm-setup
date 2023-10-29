@@ -1,0 +1,97 @@
+---
+- name: KVM Server Config Module
+  hosts: kvm
+  gather_facts: true
+  become: true
+  vars:
+    package_names:
+      - virt-top
+      - libguestfs-tools
+      - qemu-kvm
+      - libvirt
+      - virt-install
+      - virt-manager
+      - qemu-guest-agent
+  tasks:
+    - name: Update System
+      yum:
+        name: '*'
+        state: latest
+      register: has_updated
+
+    - name: Disable selinux
+      selinux:
+        state: disabled
+
+    - name: Reboot host if updated
+      reboot:
+      when: has_updated.changed
+
+    - name: Install virt packages
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items: "{{ package_names  }}"
+
+    - name: Add user to libvirt group
+      user:
+        name: emilan
+        groups: libvirt
+        append: yes
+
+    - name: Copy libvirtd.conf file to server
+      copy:
+        src: data/libvirtd.conf
+        dest: /etc/libvirt/libvirtd.conf
+
+    - name: Start and enabled libvirtd
+      systemd:
+        name: libvirtd
+        enabled: true
+        state: started
+
+    - name: Define a bridge network
+      community.libvirt.virt_net:
+        command: define
+        name: bridged-network
+        xml: '{{ lookup("template", "data/bridge.xml.j2") }}'
+
+    - name: Start the network
+      community.libvirt.virt_net:
+        command: create
+        name: bridged-network
+
+    - name: Ensure that the network is active
+      community.libvirt.virt_net:
+        state: active
+        name: bridged-network
+
+    - name: Ensure that the network will start at boot
+      community.libvirt.virt_net:
+        autostart: yes
+        name: bridged-network
+
+    - name: Define default storage pool
+      community.libvirt.virt_pool:
+        command: define
+        name: default
+        xml: '{{ lookup("template", "data/default_pool.xml.j2") }}'
+
+    - name: Build pool
+      community.libvirt.virt_pool:
+        command: create
+        name: default
+
+    - name: Ensure that the pool is active
+      community.libvirt.virt_pool:
+        state: active
+        name: default
+
+    - name: Ensure that the pool will start at boot
+      community.libvirt.virt_pool:
+        autostart: yes
+        name: default
+
+
+    - name: Reboot after doing everything
+      reboot:
