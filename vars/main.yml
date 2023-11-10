@@ -1,2 +1,12 @@
 ---
 # vars file for kvm_setup
+package_names:
+  - bridge-utils
+  - virt-manager
+  - virtinst
+  - cpu-checker
+  - libvirt-clients
+  - libvirt-daemon
+  - qemu-kvm
+  - qemu-utils
+  - python3-lxml
