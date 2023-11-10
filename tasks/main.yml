@@ -6,6 +6,7 @@
     state: latest
     update_cache: true
   with_items: "{{ package_names  }}"
+  become: true
   -tags:
     - setup
 
@@ -14,6 +15,7 @@
     name: emilan
     groups: libvirt
     append: true
+  become: true
   -tags:
     - setup
 
@@ -22,6 +24,7 @@
     name: emilan
     groups: kvm
     append: true
+  become: true
   -tags:
     - setup
 
@@ -29,6 +32,7 @@
   copy:
     src: libvirtd.conf
     dest: /etc/libvirt/libvirtd.conf
+  become: true
   -tags:
     - setup
 
@@ -37,6 +41,7 @@
     name: libvirtd
     enabled: true
     state: started
+  become: true
   -tags:
     - setup
 
@@ -44,11 +49,13 @@
   template:
     src: 01-netcfg.yaml.j2
     dest: /etc/netplan/01-netcfg.yaml
+  become: true
   -tags:
     - setup
 
 - name: Run netplan apply
   command: /usr/sbin/netplan apply
+  become: true
   -tags:
     - setup
 
@@ -94,6 +101,7 @@
     regexp: '^security_driver = "none"$'
     insertafter: '^#security_driver = "selinux"$'
     line: security_driver = "none"
+  become: true
   -tags:
     - setup
 
@@ -101,10 +109,12 @@
   ansible.builtin.systemd:
     name: libvirtd.service
     state: restarted
+  become: true
   -tags:
     - setup
 
 - name: Reboot after doing everything
   reboot:
+  become: true
   -tags:
     - setup
