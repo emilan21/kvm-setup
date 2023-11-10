@@ -7,7 +7,7 @@
     update_cache: true
   with_items: "{{ package_names  }}"
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: Add user to libvirt group
@@ -16,7 +16,7 @@
     groups: libvirt
     append: true
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: Add user to kvm group
@@ -25,7 +25,7 @@
     groups: kvm
     append: true
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: Copy libvirtd.conf file to server
@@ -33,7 +33,7 @@
     src: libvirtd.conf
     dest: /etc/libvirt/libvirtd.conf
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: Start and enabled libvirtd
@@ -42,7 +42,7 @@
     enabled: true
     state: started
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: Copy netcfg tempalte to server
@@ -50,13 +50,13 @@
     src: 01-netcfg.yaml.j2
     dest: /etc/netplan/01-netcfg.yaml
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: Run netplan apply
   command: /usr/sbin/netplan apply
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: Define default storage pool
@@ -64,35 +64,35 @@
     command: define
     name: main
     xml: '{{ lookup("template", "main_pool.xml.j2") }}'
-  -tags:
+  tags:
     - setup
 
 - name: Build a storage pool if it does not exist
   community.libvirt.virt_pool:
     command: build
     name: main
-  -tags:
+  tags:
     - setup
 
 - name: Build pool
   community.libvirt.virt_pool:
     command: create
     name: main
-  -tags:
+  tags:
     - setup
 
 - name: Ensure that the pool is active
   community.libvirt.virt_pool:
     state: active
     name: main
-  -tags:
+  tags:
     - setup
 
 - name: Ensure that the pool will start at boot
   community.libvirt.virt_pool:
     autostart: true
     name: main
-  -tags:
+  tags:
     - setup
 
 - name: Disable SELinux enforcement in qemu.conf
@@ -102,7 +102,7 @@
     insertafter: '^#security_driver = "selinux"$'
     line: security_driver = "none"
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: restart libvirtd to ensure it does not self influct selinux
@@ -110,11 +110,11 @@
     name: libvirtd.service
     state: restarted
   become: true
-  -tags:
+  tags:
     - setup
 
 - name: Reboot after doing everything
   reboot:
   become: true
-  -tags:
+  tags:
     - setup
