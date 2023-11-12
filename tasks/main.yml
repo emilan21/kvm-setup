@@ -23,7 +23,7 @@
     authorized_key:
       user: root
       state: present
-      key: "{{ lookup('file', '/home/emilan/.ssh/kvm_root.pub') }}"
+      key: "{{ lookup('file', '/home/emilan/.ssh/root_kvm.pub') }}"
 
 - name: Create images under home dir
   file:
