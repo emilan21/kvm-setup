@@ -21,7 +21,7 @@
 
 - name: Move root ssh key
   authorized_key:
-    user: root
+    user: emilan
     state: present
     key: "{{ lookup('file', '/home/emilan/.ssh/root_kvm.pub') }}"
 
