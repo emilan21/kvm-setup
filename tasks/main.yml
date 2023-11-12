@@ -27,6 +27,18 @@
     owner: emilan
     group: kvm
 
+- name: Find all vmlinuz-* files
+  find:
+    paths: /boot/
+    patterns: "vmlinuz-*"
+  register: files_to_change
+
+- name: Change vmlinuz permissions because of a bug that is not fixed in ubuntu
+  file:
+    path: "{{ item.path }}"
+    mode: a+r
+  with_items: "{{ files_to_change.files }}"
+
 - name: Copy libvirtd.conf file to server
   copy:
     src: libvirtd.conf
