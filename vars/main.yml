@@ -7,6 +7,8 @@ package_names:
   - cpu-checker
   - libvirt-clients
   - libvirt-daemon
+  - guestfs-tools
+  - python3-libvirt
   - qemu-kvm
   - qemu-utils
   - python3-lxml
