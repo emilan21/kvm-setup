@@ -39,6 +39,11 @@
     mode: a+r
   with_items: "{{ files_to_change.files }}"
 
+- name: Copy qemu.conf template to server
+  template:
+    src: qemu.conf.j2
+    dest: /etc/libvirt/qemu.conf
+
 - name: Copy libvirtd.conf file to server
   copy:
     src: libvirtd.conf
