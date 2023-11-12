@@ -6,115 +6,37 @@
     state: latest
     update_cache: true
   with_items: "{{ package_names  }}"
-  become: true
-  tags:
-    - setup
 
 - name: Add user to libvirt group
   user:
     name: emilan
     groups: libvirt
     append: true
-  become: true
-  tags:
-    - setup
 
 - name: Add user to kvm group
   user:
     name: emilan
     groups: kvm
     append: true
-  become: true
-  tags:
-    - setup
 
 - name: Copy libvirtd.conf file to server
   copy:
     src: libvirtd.conf
     dest: /etc/libvirt/libvirtd.conf
-  become: true
-  tags:
-    - setup
 
 - name: Start and enabled libvirtd
   service:
     name: libvirtd
     enabled: true
     state: started
-  become: true
-  tags:
-    - setup
 
 - name: Copy netcfg tempalte to server
   template:
     src: 01-netcfg.yaml.j2
     dest: /etc/netplan/01-netcfg.yaml
-  become: true
-  tags:
-    - setup
 
 - name: Run netplan apply
   command: /usr/sbin/netplan apply
-  become: true
-  tags:
-    - setup
-
-- name: Define default storage pool
-  community.libvirt.virt_pool:
-    command: define
-    name: main
-    xml: '{{ lookup("template", "main_pool.xml.j2") }}'
-  tags:
-    - setup
-
-- name: Build a storage pool if it does not exist
-  community.libvirt.virt_pool:
-    command: build
-    name: main
-  tags:
-    - setup
-
-- name: Build pool
-  community.libvirt.virt_pool:
-    command: create
-    name: main
-  tags:
-    - setup
-
-- name: Ensure that the pool is active
-  community.libvirt.virt_pool:
-    state: active
-    name: main
-  tags:
-    - setup
-
-- name: Ensure that the pool will start at boot
-  community.libvirt.virt_pool:
-    autostart: true
-    name: main
-  tags:
-    - setup
-
-- name: Disable SELinux enforcement in qemu.conf
-  ansible.builtin.lineinfile:
-    path: /etc/libvirt/qemu.conf
-    regexp: '^security_driver = "none"$'
-    insertafter: '^#security_driver = "selinux"$'
-    line: security_driver = "none"
-  become: true
-  tags:
-    - setup
-
-- name: restart libvirtd to ensure it does not self influct selinux
-  ansible.builtin.systemd:
-    name: libvirtd.service
-    state: restarted
-  become: true
-  tags:
-    - setup
 
 - name: Reboot after doing everything
   reboot:
-  become: true
-  tags:
-    - setup
