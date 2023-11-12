@@ -19,6 +19,12 @@
     groups: kvm
     append: true
 
+- name: Move root ssh key
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', '/home/emilan/.ssh/kvm_root.pub') }}"
+
 - name: Create images under home dir
   file:
     path: /home/emilan/images
