@@ -19,6 +19,14 @@
     groups: kvm
     append: true
 
+- name: Create images under home dir
+  file:
+    path: /home/emilan/images
+    state: directory
+    recurse: true
+    owner: emilan
+    group: kvm
+
 - name: Copy libvirtd.conf file to server
   copy:
     src: libvirtd.conf
