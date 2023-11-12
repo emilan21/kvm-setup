@@ -19,11 +19,10 @@
     groups: kvm
     append: true
 
-- name: Move root ssh key
-  authorized_key:
-    user: emilan
-    state: present
-    key: "{{ lookup('file', '/home/emilan/.ssh/root_kvm.pub') }}"
+- name: Create ssh key for root user on domains
+  command: ssh-keygen -q -t rsa -f /home/emilan/.ssh/root_kvm -C "" -N ""
+  args:
+    creates: /home/emilan/.ssh/root_kvm
 
 - name: Create images under home dir
   file:
