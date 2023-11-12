@@ -19,10 +19,10 @@
     groups: kvm
     append: true
 
-- name: Create ssh key for root user on domains
-  command: ssh-keygen -q -t rsa -f /home/emilan/.ssh/root_kvm -C "" -N ""
-  args:
-    creates: /home/emilan/.ssh/root_kvm
+- name: Copy ssh key for root user on domains
+  copy:
+    src: /home/emilan/.ssh/root_kvm.pub
+    dest: /home/emilan/.ssh/root_kvm.pub
 
 - name: Create images under home dir
   file:
