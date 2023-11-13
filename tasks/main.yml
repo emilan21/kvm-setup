@@ -21,8 +21,8 @@
 
 - name: Copy ssh key for root user on domains
   copy:
-    src: /home/emilan/.ssh/root_kvm.pub
-    dest: /home/emilan/.ssh/root_kvm.pub
+    src: /home/emilan/.ssh/emilan_domains.pub
+    dest: /home/emilan/.ssh/emilan_domains.pub
 
 - name: Create images under home dir
   file:
