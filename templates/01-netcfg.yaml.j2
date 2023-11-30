@@ -1,21 +1,21 @@
 network:
   ethernets:
-    enp11s0f1:
+    {{ interface }}:
       dhcp4: false
       dhcp6: false
   # add configuration for bridge interface
   bridges:
-    br0:
-      interfaces: [enp11s0f1]
+    {{ bridge_interface }}:
+      interfaces: [{{ interface }}]
       dhcp4: false
-      addresses: [10.1.0.3/24]
-      macaddress: 00:26:55:dd:ed:91
+      addresses: [{{ addresses }}]
+      macaddress: {{ macaddress }}
       routes:
         - to: default
-          via: 10.1.0.1
+          via: "{{ default_route }}"
           metric: 100
       nameservers:
-        addresses: [8.8.8.8]
+        addresses: [{{ nameservers }}]
       parameters:
         stp: false
       dhcp6: false

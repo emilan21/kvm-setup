@@ -2,34 +2,44 @@
 # tasks file for kvm_setup
 - name: Install virt packages
   apt:
-    name: "{{ item }}"
+    name:
+      - bridge-utils
+      - virt-manager
+      - virtinst
+      - cpu-checker
+      - libvirt-clients
+      - libvirt-daemon
+      - guestfs-tools
+      - python3-libvirt
+      - qemu-kvm
+      - qemu-utils
+      - python3-lxml
     state: latest
     update_cache: true
-  with_items: "{{ package_names  }}"
 
 - name: Add user to libvirt group
   user:
-    name: emilan
+    name: "{{ user }}"
     groups: libvirt
     append: true
 
 - name: Add user to kvm group
   user:
-    name: emilan
+    name: "{{ user }}"
     groups: kvm
     append: true
 
 - name: Copy ssh key for root user on domains
   copy:
-    src: /home/emilan/.ssh/emilan_domains.pub
-    dest: /home/emilan/.ssh/emilan_domains.pub
+    src: "{{ public_ssh_key_for_domains }}"
+    dest: "{{ public_ssh_key_for_domains }}"
 
 - name: Create images under home dir
   file:
-    path: /home/emilan/images
+    path: "/home/{{ user }}/images"
     state: directory
     recurse: true
-    owner: emilan
+    owner: "{{ user }}"
     group: kvm
 
 - name: Find all vmlinuz-* files
