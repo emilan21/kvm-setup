@@ -12,7 +12,7 @@ Role Variables
 --------------
 
 Currently the following variables are required and expected to be pass via the playbook that includes the role
-
+```yaml
 user: User account.
 public_ssh_key_for_domains: Public ssh key that will be put into the domain images. Might move this to the provisioning role
 interface: Real interface
@@ -21,6 +21,7 @@ addresses: ipv4 address in this format x.x.x.x/x so 192.168.1.5/24
 macaddress: Mac address of interface
 default_route: Default gateway
 nameservers: dns servers
+```
 
 Dependencies
 ------------
