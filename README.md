@@ -29,6 +29,7 @@ None
 
 Example Playbook
 ----------------
+```yaml
   hosts: kvm
   gather_facts: true
   become: true
@@ -56,6 +57,7 @@ Example Playbook
         macaddress: "{{ macaddress }}"
         default_route: "{{ default_route }}"
         nameservers: "{{ nameservers }}"
+```
 
 License
 -------
