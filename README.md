@@ -1,22 +1,31 @@
-Role Name
+kvm-setup
 =========
 
-A brief description of the role goes here.
+Role will setup a Ubuntu 23.04 server to be a kvm host
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Currently the following variables are required and expected to be pass via the playbook that includes the role
+
+user: User account.
+public_ssh_key_for_domains: Public ssh key that will be put into the domain images. Might move this to the provisioning role
+interface: Real interface
+bridge_interface: Bridge interface
+addresses: ipv4 address in this format x.x.x.x/x so 192.168.1.5/24
+macaddress: Mac address of interface
+default_route: Default gateway
+nameservers: dns servers
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None
 
 Example Playbook
 ----------------
@@ -30,7 +39,7 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
