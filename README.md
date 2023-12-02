@@ -29,12 +29,33 @@ None
 
 Example Playbook
 ----------------
+  hosts: kvm
+  gather_facts: true
+  become: true
+  vars:
+    user: username
+    public_ssh_key_for_domains: domains.pub
+    interface: eth0
+    bridge_interface: br0
+    addresses: 192.168.1.5/24
+    macaddress: 00:26:55:dd:ff:25
+    default_route: 192.168.1.1
+    nameservers: 8.8.8.8
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+  tasks:
+    - name: KVM Setup Role
+      include_role:
+        name: kvm_setup
+      vars:
+        user: "{{ user }}"
+        public_ssh_key_for_domains: "{{ public_ssh_key_for_domains }}"
+        interface: "{{ interface }}"
+        bridge_interface: "{{ bridge_interface }}"
+        addresses: "{{ addresses }}"
+        macaddress: "{{ macaddress }}"
+        default_route: "{{ default_route }}"
+        nameservers: "{{ nameservers }}"
 
 License
 -------
